@@ -12,6 +12,7 @@ import radity.com.MyEmployee.repository.AddressTypeRepository;
 import radity.com.MyEmployee.repository.EmployeeRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("address-types")
@@ -27,15 +28,18 @@ public class AddressController {
 
     @PostMapping("/{employeeId}/addresses")
     public ResponseEntity<?> addAddressToEmployee(
-            @PathVariable Long employeeId,
+            @PathVariable String employeeId,
             @RequestBody AddressRequestDTO addressRequest) {
 
-        Employee employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new RuntimeException("Funcionário não encontrado"));
+        Optional<Employee> optionalEmployee = employeeRepository.findById(Long.valueOf(employeeId));
 
+        if (optionalEmployee.isEmpty()) {
+            return ResponseEntity.status(404).body("Funcionário não encontrado com o email: " + employeeId);
+        }
+
+        Employee employee = optionalEmployee.get(); // Agora pode obter o Employee
         AddressType addressType = addressTypeRepository.findById(addressRequest.addressTypeId())
                 .orElseThrow(() -> new RuntimeException("Tipo de endereço inválido"));
-
 
         Address address = new Address();
         address.setAddress(addressRequest.address());

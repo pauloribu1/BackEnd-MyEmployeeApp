@@ -7,4 +7,6 @@ import lombok.Setter;
 @Setter
 public record AddressRequestDTO(Long addressTypeId, String address ) {
 
+
+
 }

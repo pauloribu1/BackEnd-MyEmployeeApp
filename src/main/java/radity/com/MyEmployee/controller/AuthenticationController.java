@@ -11,10 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import radity.com.MyEmployee.domain.employee.Employee;
-import radity.com.MyEmployee.domain.user.AuthenticationDTO;
-import radity.com.MyEmployee.domain.user.LoginResponseDTO;
-import radity.com.MyEmployee.domain.user.RegisterDTO;
-import radity.com.MyEmployee.domain.user.User;
+import radity.com.MyEmployee.domain.user.*;
 import radity.com.MyEmployee.repository.UserRepository;
 import radity.com.MyEmployee.security.TokenService;
 
@@ -32,10 +29,13 @@ public class AuthenticationController {
     public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data){
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
+        var user = (User) auth.getPrincipal();
 
         var token = tokenService.generateToken((User) auth.getPrincipal());
+        UserRole role = user.getRole();
+        Long employeeId = user.getEmployee().getId();
 
-        return ResponseEntity.ok(new LoginResponseDTO(token));
+        return ResponseEntity.ok(new LoginResponseDTO(token, role, employeeId));
     }
 
     @PostMapping("/register")

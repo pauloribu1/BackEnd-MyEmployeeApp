@@ -14,7 +14,6 @@ import java.util.List;
 @Table(name = "users")
 @Entity(name = "users")
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class User implements UserDetails {
@@ -25,7 +24,7 @@ public class User implements UserDetails {
     private String password;
     private UserRole role;
 
-    @OneToOne(cascade = CascadeType.ALL) // Automatically manage Employee creation/update
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "employee_id", referencedColumnName = "id")
     private Employee employee;
 
@@ -46,6 +45,10 @@ public class User implements UserDetails {
         else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
+
+    public Employee getEmployee(){
+        return employee;
+    }
     @Override
     public String getUsername() {
         return login;
@@ -58,6 +61,10 @@ public class User implements UserDetails {
         return this.employee = employee;
     }
 
+    public UserRole getRole(){
+        return role;
+
+    }
     @Override
     public boolean isAccountNonExpired() {
         return true;

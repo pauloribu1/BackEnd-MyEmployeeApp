@@ -26,6 +26,15 @@ public class Address {
     private String address;
 
 
+    public String getAddress(){
+        return address;
+    }
+
+    public AddressType getAddressType(){
+        return addressType;
+    }
+
+
     public String setAddress(String address){
         return this.address = address;
     }

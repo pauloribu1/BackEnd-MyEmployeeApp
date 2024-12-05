@@ -37,6 +37,8 @@ public class Employee {
         this.photoPath = photoPath;
     }
 
+
+
     public Employee(String firstName, String lastName, String jobTitle, String birthDate, String startDate,String email,String photoPath) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -85,6 +87,28 @@ public class Employee {
     public void setId(Long id) {
         this.id = id;
     }
+
+
+    public String setFirstName(String firstName){
+        return this.firstName = firstName;
+    }
+    public String setLastName(String lastName){
+        return this.lastName = lastName;
+    }
+
+    public String setJobTitle(String jobTitle){
+        return this.jobTitle = jobTitle;
+    }
+
+    public String setBirthDate(String birthDate){
+        return this.birthDate = birthDate;
+    }
+
+    public String setStartDate(String startDate){
+        return this.startDate = startDate;
+    }
+
+
 
 
 

@@ -30,8 +30,11 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST,"/auth/register").permitAll()
                         .requestMatchers(HttpMethod.POST,"/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/employee").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/employee/add").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/employee").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/address-types/{employeeId}/addresses").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/address-types").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/address-types/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/employee/add").hasRole("ADMIN")
 
 
                         .anyRequest().permitAll()
