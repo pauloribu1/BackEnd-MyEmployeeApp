@@ -107,51 +107,33 @@ public class EmployeeController {
             @RequestParam("jobTitle") String jobTitle,
             @RequestParam("birthDate") String birthDate,
             @RequestParam("startDate") String startDate,
-            @RequestParam(required = false) MultipartFile photo // MultipartFile for the photo
+            @RequestParam(required = false) MultipartFile photo
     ) {
-
         String filePath = null;
-/*
-        // Handle the file upload logic
+
         if (photo != null && !photo.isEmpty()) {
-            String appDataPath = System.getenv("APPDATA");
-            String uploadDir = Paths.get(appDataPath, "MyEmployee", "uploads", "employees").toString(); // Finish this if possible
-            String fileName = photo.getOriginalFilename();
+            try {
+                String appDataPath = System.getenv("APPDATA");
+                String uploadDir = Paths.get(appDataPath, "MyEmployee", "uploads", "employees").toString();
+                String fileName = photo.getOriginalFilename();
 
-            File directory = new File(uploadDir);
-            if (!directory.exists()) {
-                directory.mkdirs();
-            }
-            if (photo != null && !photo.isEmpty()) {
-
-                filePath = uploadDir + File.separator + fileName; // Ensure the path uses the correct separator for the OS
-
-                try {
-                    photo.transferTo(new File(filePath)); // Save the photo to the file system
-                } catch (IOException e) {
-                    return ResponseEntity.status(500).body("Error saving the photo: " + e.getMessage());
+                File directory = new File(uploadDir);
+                if (!directory.exists()) {
+                    directory.mkdirs();
                 }
-            } else {
-                filePath = uploadDir + File.separator + "default.png";
-                return ResponseEntity.status(500).body("Error saving the photo: Default one selected");
+
+                filePath = uploadDir + File.separator + fileName;
+                photo.transferTo(new File(filePath));
+            } catch (IOException e) {
+                return ResponseEntity.status(500).body("Error saving the photo: " + e.getMessage());
             }
-*/
-            // Create and save the new employee
-            Employee newEmployee = new Employee(firstName, lastName, jobTitle, birthDate, startDate, email, filePath);
-            employeeRepository.save(newEmployee);
-/*
-            // Create address
-            AddressType addressType = addressTypeRepository.findById(addressTypeId)
-                    .orElseThrow(() -> new RuntimeException("Address Type not found"));
-
-            Address address = new Address();
-            address.setEmployee(newEmployee);
-            address.setAddressType(addressType);
-            addressRepository.save(address);
- */
-
-            return ResponseEntity.status(201).body("Employee created successfully. "+ newEmployee.getId());
         }
+
+        Employee newEmployee = new Employee(firstName, lastName, jobTitle, birthDate, startDate, email, filePath);
+        employeeRepository.save(newEmployee);
+
+        return ResponseEntity.status(201).body("Employee created successfully. ID: " + newEmployee.getId());
+    }
 
 
     @DeleteMapping("/{id}")
